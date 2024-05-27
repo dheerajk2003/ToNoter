@@ -33,12 +33,38 @@ router.get("/getSpec", async (req, res) => {
     }
 });
 
-router.post("/register",(req, res) => {
+router.post("/register", async (req, res) => {
     const data = req.body;
+    if(await DataModel.findOne({"name": data.name})){
+        res.status(409).send("name already taken");
+        return;
+    }
     var dm = new DataModel(data);
     dm.save();
     res.send("done");
 });
+
+router.post("/login", async (req, res) => {
+    try{
+        const data = req.body;
+        if(!data){
+            res.status(500).send("error");
+            return;
+        }
+        const oneUser = await DataModel.findOne({"name": data.name, "password": data.password});
+        console.log("login cred = " + oneUser);
+        if(!oneUser){
+            res.status(401).send("not registered");
+        }
+        else{
+            res.status(200).send("logged in successfully");
+        }
+    }
+    catch(e){
+        console.log(e);
+        res.status(500).send("error");
+    }
+})
 
 router.put("/update", async (req,res) => {
     try{
