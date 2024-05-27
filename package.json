@@ -1,0 +1,23 @@
+{
+  "name": "tonoter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dheerajk2003/ToNoter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dheerajk2003/ToNoter/issues"
+  },
+  "homepage": "https://github.com/dheerajk2003/ToNoter#readme",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.4.0"
+  }
+}
