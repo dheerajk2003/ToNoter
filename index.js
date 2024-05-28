@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const User = require('./Schema');
 const UserFile = require('./routes/User');
+const NotesFile = require('./routes/Notes');
 
 const app = express();
 app.use(express.json());
@@ -15,9 +16,9 @@ catch (e) {
 mongoose.connection.on('connected', () => {
     console.log('Mongoose connected to the database');
 });
-const DataModel = mongoose.model("DataModel", User);
 
-app.use("/User",UserFile);
+app.use("/User", UserFile);
+app.use("/Notes", NotesFile)
 
 app.get("/", (req, res) => {
     res.send("heelo");

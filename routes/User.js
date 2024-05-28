@@ -2,13 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 const mongoose = require('mongoose');
-const User = require('../Schema');
-
-const DataModel = mongoose.model("DataModel", User);
+const {User} = require('../Schema');
 
 router.get("/",async (req,res)=>{
     try {
-        res.send( await DataModel.find());
+        res.send( await User.find());
     }
     catch (e) {
         console.log(e);
@@ -21,10 +19,10 @@ router.get("/getSpec", async (req, res) => {
         const name = req.query.name;
         const id = req.query.id;
         if(name){
-            res.send(await DataModel.findOne({"name": name}));
+            res.send(await User.findOne({"name": name}));
         }
         else if(id){
-            res.send(await DataModel.findOne({"_id": id}));
+            res.send(await User.findOne({"_id": id}));
         }
     }
     catch (e) {
@@ -35,11 +33,11 @@ router.get("/getSpec", async (req, res) => {
 
 router.post("/register", async (req, res) => {
     const data = req.body;
-    if(await DataModel.findOne({"name": data.name})){
+    if(await User.findOne({"name": data.name})){
         res.status(409).send("name already taken");
         return;
     }
-    var dm = new DataModel(data);
+    var dm = new User(data);
     dm.save();
     res.send("done");
 });
@@ -51,7 +49,7 @@ router.post("/login", async (req, res) => {
             res.status(500).send("error");
             return;
         }
-        const oneUser = await DataModel.findOne({"name": data.name, "password": data.password});
+        const oneUser = await User.findOne({"name": data.name, "password": data.password});
         console.log("login cred = " + oneUser);
         if(!oneUser){
             res.status(401).send("not registered");
@@ -74,9 +72,9 @@ router.put("/update", async (req,res) => {
             return;            
         } 
 
-        await DataModel.findByIdAndUpdate(data._id, {name:data.name, password:data.password});
+        await User.findByIdAndUpdate(data._id, {name:data.name, password:data.password});
 
-        // var oneUser = await DataModel.findById(data._id);
+        // var oneUser = await User.findById(data._id);
         // oneUser.name = data.name;
         // oneUser.password = data.password;
         // oneUser.save();
@@ -90,7 +88,7 @@ router.put("/update", async (req,res) => {
 
 router.delete("/remove",(req, res) => {
     const id = req.query.id;
-    DataModel.findByIdAndDelete(id).exec();
+    User.findByIdAndDelete(id).exec();
     res.status(200).send("done");
 })
 
