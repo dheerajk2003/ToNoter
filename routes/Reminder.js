@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Notes } = require('../Schema');
+const { Reminder } = require('../Schema');
 
 router.get("/", async (req, res) => {
     try {
@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
             res.status(409).send("inappropriate request");
             return;
         }
-        res.send(await Notes.find({ "userId": id }));
+        res.send(await Reminder.find({ "userId": id }));
     }
     catch (e) {
         console.log(e);
@@ -24,7 +24,7 @@ router.get("/one", async (req, res) => {
             res.status(409).send("inappropriate request");
             return;
         }
-        res.send(await Notes.findOne({ "_id": id }));
+        res.send(await Reminder.findOne({ "_id": id }));
     }
     catch (e) {
         console.log(e);
@@ -39,8 +39,9 @@ router.post("/add", (req, res) => {
             res.status(409).send("inappropriate request");
             return;
         }
-        var note = new Notes(data);
-        note.save();
+        const rem = {userId: data.userId, note: data.note, time: new Date(data.time)};
+        var reminder = new Reminder(rem);
+        reminder.save();
         res.status(200).send("done");
     }
     catch (e) {
@@ -56,7 +57,7 @@ router.put("/update", async (req,res) => {
             res.status(409).send("inappropriate request");
             return;
         }
-        await Notes.findByIdAndUpdate(data._id, data);
+        await Reminder.findByIdAndUpdate(data._id, data);
         res.status(200).send("done");
     }
     catch(e){
@@ -68,7 +69,7 @@ router.put("/update", async (req,res) => {
 router.delete("/remove",(req, res) => {
     try{
         const id = req.query.id;
-        Notes.findByIdAndDelete(id).exec();
+        Reminder.findByIdAndDelete(id).exec();
         res.status(200).send("done");
     }
     catch(e){
